@@ -6,6 +6,7 @@ mod test;
 
 use async_std::sync::RwLock;
 use log::error;
+use log::warn;
 use serenity::client::{Context, EventHandler};
 use serenity::Client;
 use std::env;
@@ -102,6 +103,13 @@ async fn run_server(_ctx: Arc<Context>, server: Arc<RwLock<Server>>) {
 #[tokio::main]
 async fn main() {
     pretty_env_logger::init_timed();
+
+    match dotenvy::dotenv() {
+        Ok(_) => {}
+        Err(e) => {
+            warn!("Error loading .env file: {}", e);
+        }
+    }
 
     for argument in env::args() {
         match argument.to_lowercase().as_str() {
